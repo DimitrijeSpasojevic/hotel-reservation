@@ -1,0 +1,9 @@
+Hotel - hotelId, ime, opis, grad
+
+TipSobe - tipSobeId, ime, cena, rangeStart, rangeEnd, hotelId, termini
+
+Termin - terminId, tipSobe, datum, brojSlobodnihSoba
+
+Rezervacija - tipSobeId, id startnog termina, id krajnjeg termina
+
+Recenzija - id, hotelId, ocena, komentar, userId
