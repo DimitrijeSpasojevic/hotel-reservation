@@ -13,6 +13,8 @@ import rs.edu.raf.hotelreservation.dto.CreateTipSobeDto;
 import rs.edu.raf.hotelreservation.dto.HotelDto;
 import rs.edu.raf.hotelreservation.dto.TipSobeDto;
 import rs.edu.raf.hotelreservation.service.HotelService;
+import rs.edu.raf.hotelreservation.service.TerminService;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 
@@ -52,10 +54,10 @@ public class HotelController {
         return new ResponseEntity<>(hotelService.getHotelById(id), HttpStatus.OK);
     }
 
-    @ApiOperation(value = "Get all room types")
-    @GetMapping("/types")
-    public ResponseEntity<Page<TipSobeDto>> getAllRoomTypes(Pageable pageable){
-        return new ResponseEntity<>(hotelService.getAllRoomTypes(pageable), HttpStatus.OK);
+    @ApiOperation(value = "Get all room types for hotel")
+    @GetMapping("/{id}/types")
+    public ResponseEntity<Page<TipSobeDto>> getAllRoomTypes(@PathVariable("id") Long id, @ApiIgnore Pageable pageable){
+        return new ResponseEntity<>(hotelService.getAllRoomTypes(id, pageable), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Create room type")

@@ -12,6 +12,6 @@ public interface HotelService {
     HotelDto addHotel(CreateHotelDto createHotelDto);
     HotelDto changeHotel(HotelDto hotelDto);
     HotelDto getHotelById(Long id);
-    Page<TipSobeDto> getAllRoomTypes(Pageable pageable);
+    Page<TipSobeDto> getAllRoomTypes(Long hotelId, Pageable pageable);
     TipSobeDto createRoomType(CreateTipSobeDto createTipSobeDto);
 }

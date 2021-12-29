@@ -15,12 +15,21 @@ public class Rezervacija {
     @ManyToOne
     private Termin kraj;
 
+    @Id
+    public Long getId() {
+        return id;
+    }
+
     public TipSobe getTipSobe() {
         return tipSobe;
     }
 
     public void setTipSobe(TipSobe tipSobe) {
         this.tipSobe = tipSobe;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Termin getPocetak() {
@@ -37,14 +46,5 @@ public class Rezervacija {
 
     public void setKraj(Termin kraj) {
         this.kraj = kraj;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    @Id
-    public Long getId() {
-        return id;
     }
 }
