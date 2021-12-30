@@ -1,7 +1,8 @@
 package rs.edu.raf.hotelreservation.domain;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Rezervacija {
@@ -10,10 +11,8 @@ public class Rezervacija {
     private Long id;
     @ManyToOne
     private TipSobe tipSobe;
-    @ManyToOne
-    private Termin pocetak;
-    @ManyToOne
-    private Termin kraj;
+    @ManyToMany
+    private List<Termin> termini = new ArrayList<>();
 
     public Long getId() {
         return id;

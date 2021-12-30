@@ -16,7 +16,7 @@ import springfox.documentation.annotations.ApiIgnore;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("hotel/{id}/recenzija")
+@RequestMapping("/recenzija")
 public class RecenzijaController {
 
     private RecenzijaService recenzijaService;

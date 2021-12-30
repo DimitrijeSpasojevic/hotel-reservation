@@ -24,41 +24,41 @@ public class TerminController {
         this.terminService = terminService;
     }
 
-    @ApiOperation(value = "Get all termini")
-    @GetMapping
-    public ResponseEntity<Page<TerminDto>> getAllTermini(@ApiIgnore Pageable pageable) {
-        return new ResponseEntity<>(terminService.getAll(pageable), HttpStatus.OK);
-    }
-
-    @ApiOperation(value = "Get all termini by city")
+    @ApiOperation(value = "Get all available termini by city")
     @GetMapping("/city/{city}")
     public ResponseEntity<Page<TerminDto>> getAllTerminiByCity(@PathVariable("city") String city, @ApiIgnore Pageable pageable) {
-        return new ResponseEntity<>(terminService.getAllByCity(city, pageable), HttpStatus.OK);
+        return new ResponseEntity<>(terminService.getAllAvailableByCity(city, pageable), HttpStatus.OK);
     }
 
-    @ApiOperation(value = "Get all termini by hotel")
+    @ApiOperation(value = "Get all available termini by hotel")
     @GetMapping("/hotel/{hotelId}")
     public ResponseEntity<Page<TerminDto>> getAllTerminiByHotel(@PathVariable("hotelId") Long hotelId, @ApiIgnore Pageable pageable) {
-        return new ResponseEntity<>(terminService.getAllByHotel(hotelId, pageable), HttpStatus.OK);
+        return new ResponseEntity<>(terminService.getAllAvailableByHotel(hotelId, pageable), HttpStatus.OK);
     }
 
-    @ApiOperation(value = "Get all termini by period")
+    @ApiOperation(value = "Get all available termini by period")
     @GetMapping("/period/{startDate}/{endDate}")
     public ResponseEntity<Page<TerminDto>> getAllTerminiByPeriod(@PathVariable("startDate") Date startDate,
                                                                  @PathVariable("endDate") Date endDate, @ApiIgnore Pageable pageable) {
-        return new ResponseEntity<>(terminService.getAllByPeriod(startDate, endDate, pageable), HttpStatus.OK);
+        return new ResponseEntity<>(terminService.getAllAvailableByPeriod(startDate, endDate, pageable), HttpStatus.OK);
     }
 
-    @ApiOperation(value = "Get all termini by price")
+    @ApiOperation(value = "Get all available termini by price")
     @GetMapping("/price/{minPrice}/{maxPrice}")
     public ResponseEntity<Page<TerminDto>> getAllTerminiByPrice(@PathVariable("minPrice") BigDecimal minPrice,
                                                                 @PathVariable("maxPrice") BigDecimal maxPrice, @ApiIgnore Pageable pageable) {
-        return new ResponseEntity<>(terminService.getAllByPrice(minPrice, maxPrice, pageable), HttpStatus.OK);
+        return new ResponseEntity<>(terminService.getAllAvailableByPrice(minPrice, maxPrice, pageable), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Create termin")
     @PostMapping
     public ResponseEntity<TerminDto> createTermin(@RequestBody @Valid CreateTerminDto createTerminDto) {
         return new ResponseEntity<>(terminService.createTermin(createTerminDto), HttpStatus.CREATED);
+    }
+
+    @ApiOperation(value = "Delete termin")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<TerminDto> deleteTermin(@PathVariable("id") Long id) {
+        return new ResponseEntity<>(terminService.deleteTerminById(id), HttpStatus.OK);
     }
 }

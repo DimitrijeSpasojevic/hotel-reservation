@@ -1,7 +1,5 @@
 package rs.edu.raf.hotelreservation.dto;
 
-import rs.edu.raf.hotelreservation.domain.Termin;
-import rs.edu.raf.hotelreservation.domain.TipSobe;
 import javax.validation.constraints.NotEmpty;
 
 public class RezervacijaDto {

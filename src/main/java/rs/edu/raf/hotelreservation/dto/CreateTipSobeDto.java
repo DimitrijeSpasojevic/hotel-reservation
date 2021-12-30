@@ -20,7 +20,6 @@ public class CreateTipSobeDto {
     @NotNull
     private Long hotelId;
 
-
     public String getIme() {
         return ime;
     }
@@ -51,5 +50,13 @@ public class CreateTipSobeDto {
 
     public void setKrajOpsegaSoba(int krajOpsegaSoba) {
         this.krajOpsegaSoba = krajOpsegaSoba;
+    }
+
+    public Long getHotelId() {
+        return this.hotelId;
+    }
+
+    public void setHotelId(Long hotelId) {
+        this.hotelId = hotelId;
     }
 }

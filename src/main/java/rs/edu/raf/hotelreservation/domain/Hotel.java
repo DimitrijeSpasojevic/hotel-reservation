@@ -1,9 +1,8 @@
 package rs.edu.raf.hotelreservation.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Hotel {
@@ -13,6 +12,16 @@ public class Hotel {
     private String ime;
     private String opis;
     private String grad;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "hotel", orphanRemoval = true)
+    private List<Recenzija> recenzije = new ArrayList<>();
+
+    public List<Recenzija> getRecenzije() {
+        return recenzije;
+    }
+
+    public void setRecenzije(List<Recenzija> recenzije) {
+        this.recenzije = recenzije;
+    }
 
     public String getIme() {
         return ime;

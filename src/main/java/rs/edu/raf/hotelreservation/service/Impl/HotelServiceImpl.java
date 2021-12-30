@@ -66,6 +66,7 @@ public class HotelServiceImpl implements HotelService {
 
     @Override
     public TipSobeDto createRoomType(CreateTipSobeDto createTipSobeDto) {
-        return null;
+        TipSobe tipSobe = tipSobeRepository.save(tipSobeMapper.createTipSobeDtoToTipSobe(createTipSobeDto));
+        return tipSobeMapper.tipSobeToTipSobeDto(tipSobe);
     }
 }

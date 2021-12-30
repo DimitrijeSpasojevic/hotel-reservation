@@ -8,10 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import rs.edu.raf.hotelreservation.dto.CreateHotelDto;
-import rs.edu.raf.hotelreservation.dto.CreateTipSobeDto;
-import rs.edu.raf.hotelreservation.dto.HotelDto;
-import rs.edu.raf.hotelreservation.dto.TipSobeDto;
+import rs.edu.raf.hotelreservation.dto.*;
 import rs.edu.raf.hotelreservation.service.HotelService;
 import rs.edu.raf.hotelreservation.service.TerminService;
 import springfox.documentation.annotations.ApiIgnore;
@@ -23,9 +20,11 @@ import javax.validation.Valid;
 public class HotelController {
 
     private HotelService hotelService;
+    private TerminService terminService;
 
-    public HotelController(HotelService hotelService) {
+    public HotelController(HotelService hotelService, TerminService terminService) {
         this.hotelService = hotelService;
+        this.terminService = terminService;
     }
 
     @ApiOperation(value = "Get all hotels")
@@ -70,5 +69,11 @@ public class HotelController {
     @PutMapping
     public ResponseEntity<HotelDto> changeHotel(@RequestBody @Valid HotelDto hotelDto) {
         return new ResponseEntity<>(hotelService.changeHotel(hotelDto), HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "Get all termini for hotel")
+    @GetMapping("/{id}/termini")
+    public ResponseEntity<Page<TerminDto>> getAllTermini(@PathVariable("id") Long id, @ApiIgnore Pageable pageable) {
+        return new ResponseEntity<>(terminService.getAllByHotel(id, pageable), HttpStatus.OK);
     }
 }

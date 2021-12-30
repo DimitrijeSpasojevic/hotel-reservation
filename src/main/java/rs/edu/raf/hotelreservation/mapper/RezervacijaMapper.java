@@ -6,8 +6,11 @@ import rs.edu.raf.hotelreservation.domain.Termin;
 import rs.edu.raf.hotelreservation.domain.TipSobe;
 import rs.edu.raf.hotelreservation.dto.CreateRezervacijaDto;
 import rs.edu.raf.hotelreservation.dto.RezervacijaDto;
+import rs.edu.raf.hotelreservation.exception.NotFoundException;
 import rs.edu.raf.hotelreservation.repository.TerminRepository;
 import rs.edu.raf.hotelreservation.repository.TipSobeRepository;
+
+import java.util.List;
 
 @Component
 public class RezervacijaMapper {
@@ -32,10 +35,12 @@ public class RezervacijaMapper {
         Rezervacija rezervacija = new Rezervacija();
         TipSobe tipSobe = tipSobeRepository.getById(createRezervacijaDto.getTipSobeId());
         rezervacija.setTipSobe(tipSobe);
-        Termin pocetak = terminRepository.getById(createRezervacijaDto.getPocetniTerminId());
-        rezervacija.setPocetak(pocetak);
-        Termin kraj = terminRepository.getById(createRezervacijaDto.getKrajnjiTerminId());
-        rezervacija.setKraj(kraj);
+        Termin pocetak = terminRepository.findById(createRezervacijaDto.getPocetniTerminId())
+                .orElseThrow(() -> new NotFoundException(String.format("Termin with id: %d not found", createRezervacijaDto.getPocetniTerminId())));
+        Termin kraj = terminRepository.findById(createRezervacijaDto.getKrajnjiTerminId())
+                .orElseThrow(() -> new NotFoundException(String.format("Termin with id: %d not found", createRezervacijaDto.getKrajnjiTerminId())));
+        List<Termin> termini = terminRepository.findAllByTipSobe_IdAndDatumBetween(tipSobe.getId(), pocetak.getDatum(), kraj.getDatum());
+        rezervacija.setTermini(termini);
         return rezervacija;
     }
 

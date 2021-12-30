@@ -7,7 +7,6 @@ import java.util.List;
 
 @Entity
 public class TipSobe {
-    //TipSobe - tipSobeId, ime, cena, pocetakOpsegaSoba, krajOpsegaSoba, hotelId, termini
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

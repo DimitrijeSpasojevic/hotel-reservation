@@ -5,6 +5,7 @@ import rs.edu.raf.hotelreservation.domain.TipSobe;
 import rs.edu.raf.hotelreservation.dto.CreateTerminDto;
 import rs.edu.raf.hotelreservation.domain.Termin;
 import rs.edu.raf.hotelreservation.dto.TerminDto;
+import rs.edu.raf.hotelreservation.exception.NotFoundException;
 import rs.edu.raf.hotelreservation.repository.TipSobeRepository;
 
 @Component
@@ -26,7 +27,8 @@ public class TerminMapper {
     public Termin createTerminDtoToTermin(CreateTerminDto createTerminDto) {
         Termin termin = new Termin();
         termin.setDatum(createTerminDto.getDatum());
-        TipSobe tipSobe = tipSobeRepository.getById(createTerminDto.getTipSobeId());
+        TipSobe tipSobe = tipSobeRepository.findById(createTerminDto.getTipSobeId())
+                .orElseThrow(() -> new NotFoundException(String.format("TipSobe with id: %d not found.", createTerminDto.getTipSobeId())));
         termin.setTipSobe(tipSobe);
         termin.setBrojSlobodnihSoba(tipSobe.getKrajOpsegaSoba() - tipSobe.getPocetakOpsegaSoba());
         return termin;
