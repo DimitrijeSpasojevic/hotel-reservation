@@ -49,7 +49,6 @@ public class Recenzija {
         this.komentar = komentar;
     }
 
-    @Id
     public Long getId() {
         return id;
     }

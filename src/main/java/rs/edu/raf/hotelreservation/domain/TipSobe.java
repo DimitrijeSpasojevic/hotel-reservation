@@ -72,7 +72,6 @@ public class TipSobe {
         this.hotel = hotel;
     }
 
-    @Id
     public Long getId() {
         return id;
     }

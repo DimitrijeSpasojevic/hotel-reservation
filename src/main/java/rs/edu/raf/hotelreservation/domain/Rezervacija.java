@@ -15,7 +15,6 @@ public class Rezervacija {
     @ManyToOne
     private Termin kraj;
 
-    @Id
     public Long getId() {
         return id;
     }
@@ -32,19 +31,11 @@ public class Rezervacija {
         this.id = id;
     }
 
-    public Termin getPocetak() {
-        return pocetak;
+    public List<Termin> getTermini() {
+        return termini;
     }
 
-    public void setPocetak(Termin pocetak) {
-        this.pocetak = pocetak;
-    }
-
-    public Termin getKraj() {
-        return kraj;
-    }
-
-    public void setKraj(Termin kraj) {
-        this.kraj = kraj;
+    public void setTermini(List<Termin> termini) {
+        this.termini = termini;
     }
 }

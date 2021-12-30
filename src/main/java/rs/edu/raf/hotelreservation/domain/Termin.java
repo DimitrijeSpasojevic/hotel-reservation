@@ -11,6 +11,7 @@ public class Termin {
     private Date datum;
     @ManyToOne
     private TipSobe tipSobe;
+
     private int brojSlobodnihSoba;
 
     public TipSobe getTipSobe() {
@@ -41,7 +42,6 @@ public class Termin {
         this.id = id;
     }
 
-    @Id
     public Long getId() {
         return id;
     }

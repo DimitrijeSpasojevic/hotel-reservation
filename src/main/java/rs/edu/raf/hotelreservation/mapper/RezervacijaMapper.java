@@ -23,8 +23,8 @@ public class RezervacijaMapper {
         RezervacijaDto rezervacijaDto = new RezervacijaDto();
         rezervacijaDto.setId(rezervacija.getId());
         rezervacijaDto.setTipSobeId(rezervacija.getTipSobe().getId());
-        rezervacijaDto.setPocetniTerminId(rezervacija.getPocetak().getId());
-        rezervacijaDto.setKrajnjiTerminId(rezervacija.getKraj().getId());
+        rezervacijaDto.setPocetniTerminId(rezervacija.getTermini().get(0).getId());
+        rezervacijaDto.setKrajnjiTerminId(rezervacija.getTermini().get(rezervacija.getTermini().size() - 1).getId());
         return rezervacijaDto;
     }
 

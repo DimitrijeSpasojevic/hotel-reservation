@@ -48,6 +48,7 @@ public class HotelServiceImpl implements HotelService {
         hotel.setOpis(hotelDto.getOpis());
         hotel.setIme(hotelDto.getIme());
         hotel.setGrad(hotelDto.getGrad());
+        hotelRepository.save(hotel);
         return hotelMapper.hotelToHotelDto(hotel);
     }
 
