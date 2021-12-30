@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rs.edu.raf.hotelreservation.dto.CreateTerminDto;
+import rs.edu.raf.hotelreservation.dto.SearchTerminsByDateDto;
 import rs.edu.raf.hotelreservation.service.TerminService;
 import rs.edu.raf.hotelreservation.dto.TerminDto;
 import springfox.documentation.annotations.ApiIgnore;
@@ -37,10 +38,11 @@ public class TerminController {
     }
 
     @ApiOperation(value = "Get all available termini by period")
-    @GetMapping("/period/{startDate}/{endDate}")
-    public ResponseEntity<Page<TerminDto>> getAllTerminiByPeriod(@PathVariable("startDate") Date startDate,
-                                                                 @PathVariable("endDate") Date endDate, @ApiIgnore Pageable pageable) {
-        return new ResponseEntity<>(terminService.getAllAvailableByPeriod(startDate, endDate, pageable), HttpStatus.OK);
+    @PostMapping("/period")
+    public ResponseEntity<Page<TerminDto>> getAllTerminiByPeriod(@RequestBody @Valid SearchTerminsByDateDto searchTerminsByDateDto,
+                                                                 @ApiIgnore Pageable pageable) {
+        return new ResponseEntity<>(terminService.
+                getAllAvailableByPeriod(searchTerminsByDateDto.getStartDate(), searchTerminsByDateDto.getEndDate(), pageable), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Get all available termini by price")

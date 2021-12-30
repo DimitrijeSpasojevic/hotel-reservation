@@ -21,6 +21,7 @@ public class TerminMapper {
         terminDto.setId(termin.getId());
         terminDto.setDatum(termin.getDatum());
         terminDto.setBrojSlobodnihSoba(termin.getBrojSlobodnihSoba());
+        terminDto.setTipSobeId(termin.getTipSobe().getId());
         return terminDto;
     }
 

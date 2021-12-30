@@ -47,7 +47,6 @@ public class RezervacijaServiceImpl implements RezervacijaService {
 
     @Override
     public RezervacijaDto deleteRezervacijaById(Long rezervacijaId) {
-        // TODO ažuriraj termine i broj slobodnih soba
         // TODO obavesti korisnički servis o rezervaciji
         Rezervacija rezervacija = rezervacijaRepository.findById(rezervacijaId)
                 .orElseThrow(() -> new NotFoundException(String.format("Rezervacija with id: %d not found.", rezervacijaId)));
