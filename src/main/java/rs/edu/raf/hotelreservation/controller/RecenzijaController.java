@@ -6,7 +6,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import rs.edu.raf.hotelreservation.dto.CreateHotelDto;
 import rs.edu.raf.hotelreservation.dto.CreateRecenzijaDto;
 import rs.edu.raf.hotelreservation.dto.RecenzijaDto;
 import rs.edu.raf.hotelreservation.dto.UpdateRecenzijaDto;

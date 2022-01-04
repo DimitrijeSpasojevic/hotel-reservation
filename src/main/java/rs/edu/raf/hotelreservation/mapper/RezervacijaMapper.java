@@ -41,6 +41,7 @@ public class RezervacijaMapper {
                 .orElseThrow(() -> new NotFoundException(String.format("Termin with id: %d not found", createRezervacijaDto.getKrajnjiTerminId())));
         List<Termin> termini = terminRepository.findAllByTipSobe_IdAndDatumBetween(tipSobe.getId(), pocetak.getDatum(), kraj.getDatum());
         rezervacija.setTermini(termini);
+        rezervacija.setReminded(false);
         return rezervacija;
     }
 

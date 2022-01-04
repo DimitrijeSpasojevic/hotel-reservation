@@ -12,7 +12,9 @@ import rs.edu.raf.hotelreservation.repository.TerminRepository;
 import rs.edu.raf.hotelreservation.repository.TipSobeRepository;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Profile({"default"})
 @Component
@@ -21,17 +23,15 @@ public class TestDataRunner implements CommandLineRunner {
     private HotelRepository hotelRepository;
     private TerminRepository terminRepository;
     private TipSobeRepository tipSobeRepository;
-    private RezervacijaRepository rezervacijaRepository;
 
     public TestDataRunner(HotelRepository hotelRepository, TerminRepository terminRepository, TipSobeRepository tipSobeRepository, RezervacijaRepository rezervacijaRepository) {
         this.hotelRepository = hotelRepository;
         this.terminRepository = terminRepository;
         this.tipSobeRepository = tipSobeRepository;
-        this.rezervacijaRepository = rezervacijaRepository;
     }
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         Hotel hotel = new Hotel();
         hotel.setGrad("Beograd");
         hotel.setIme("HOTELBEOGRAD");
@@ -47,7 +47,7 @@ public class TestDataRunner implements CommandLineRunner {
         tipSobeRepository.save(tipSobe);
 
         Termin termin = new Termin();
-        termin.setDatum(new GregorianCalendar(2021, Calendar.DECEMBER, 30).getTime());
+        termin.setDatum(LocalDate.of(2022, 1, 4));
         termin.setTipSobe(tipSobe);
         termin.setBrojSlobodnihSoba(30);
 

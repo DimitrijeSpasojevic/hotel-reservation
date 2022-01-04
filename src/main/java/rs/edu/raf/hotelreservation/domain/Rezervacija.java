@@ -13,6 +13,7 @@ public class Rezervacija {
     private TipSobe tipSobe;
     @ManyToMany
     private List<Termin> termini = new ArrayList<>();
+    private boolean reminded;
 
     private Long userId;
 
@@ -46,5 +47,13 @@ public class Rezervacija {
 
     public void setTermini(List<Termin> termini) {
         this.termini = termini;
+    }
+
+    public boolean isReminded() {
+        return reminded;
+    }
+
+    public void setReminded(boolean notified) {
+        this.reminded = notified;
     }
 }

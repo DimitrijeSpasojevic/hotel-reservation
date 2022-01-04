@@ -1,9 +1,9 @@
 package rs.edu.raf.hotelreservation.dto;
 
-import javax.validation.constraints.NotEmpty;
-import java.math.BigDecimal;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
 public class TipSobeDto {
     private Long id;

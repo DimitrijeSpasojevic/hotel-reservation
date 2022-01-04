@@ -1,9 +1,9 @@
 package rs.edu.raf.hotelreservation.mapper;
 
 import org.springframework.stereotype.Component;
+import rs.edu.raf.hotelreservation.domain.Termin;
 import rs.edu.raf.hotelreservation.domain.TipSobe;
 import rs.edu.raf.hotelreservation.dto.CreateTerminDto;
-import rs.edu.raf.hotelreservation.domain.Termin;
 import rs.edu.raf.hotelreservation.dto.TerminDto;
 import rs.edu.raf.hotelreservation.exception.NotFoundException;
 import rs.edu.raf.hotelreservation.repository.TipSobeRepository;

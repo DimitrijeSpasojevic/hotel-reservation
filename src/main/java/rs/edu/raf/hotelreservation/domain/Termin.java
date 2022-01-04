@@ -1,14 +1,14 @@
 package rs.edu.raf.hotelreservation.domain;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 public class Termin {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Date datum;
+    private LocalDate datum;
     @ManyToOne
     private TipSobe tipSobe;
 
@@ -22,7 +22,7 @@ public class Termin {
         this.tipSobe = tipSobe;
     }
 
-    public Date getDatum() {
+    public LocalDate getDatum() {
         return datum;
     }
 
@@ -34,7 +34,7 @@ public class Termin {
         this.brojSlobodnihSoba = brojSlobodnihSoba;
     }
 
-    public void setDatum(Date datum) {
+    public void setDatum(LocalDate datum) {
         this.datum = datum;
     }
 

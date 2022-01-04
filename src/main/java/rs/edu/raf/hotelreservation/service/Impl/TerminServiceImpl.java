@@ -12,7 +12,7 @@ import rs.edu.raf.hotelreservation.repository.TerminRepository;
 import rs.edu.raf.hotelreservation.service.TerminService;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Service
 public class TerminServiceImpl implements TerminService {
@@ -42,7 +42,7 @@ public class TerminServiceImpl implements TerminService {
     }
 
     @Override
-    public Page<TerminDto> getAllAvailableByPeriod(Date pocetniDatum, Date krajnjiDatum, Pageable pageable) {
+    public Page<TerminDto> getAllAvailableByPeriod(LocalDate pocetniDatum, LocalDate krajnjiDatum, Pageable pageable) {
         return terminRepository.findAllByDatumBetweenAndBrojSlobodnihSobaNot(pocetniDatum, krajnjiDatum, 0, pageable)
                 .map(terminMapper::terminToTerminDto);
     }

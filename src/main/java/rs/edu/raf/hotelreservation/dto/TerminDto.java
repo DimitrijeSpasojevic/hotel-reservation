@@ -1,14 +1,13 @@
 package rs.edu.raf.hotelreservation.dto;
 
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
+import java.time.LocalDate;
 
 public class TerminDto {
     private Long id;
-    @NotEmpty(message = "datum ne moze da ostane prazan")
-    private Date datum;
+    @NotNull(message = "datum ne moze da bude null")
+    private LocalDate datum;
     @NotNull
     @Min(value = 0, message = "Broj slobodnih soba mora biti pozitivan")
     private int brojSlobodnihSoba;
@@ -31,11 +30,11 @@ public class TerminDto {
         this.id = id;
     }
 
-    public Date getDatum() {
+    public LocalDate getDatum() {
         return datum;
     }
 
-    public void setDatum(Date datum) {
+    public void setDatum(LocalDate datum) {
         this.datum = datum;
     }
 
