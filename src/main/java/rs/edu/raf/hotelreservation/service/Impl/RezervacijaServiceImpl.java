@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import rs.edu.raf.hotelreservation.domain.Rezervacija;
 import rs.edu.raf.hotelreservation.domain.Termin;
 import rs.edu.raf.hotelreservation.dto.CreateRezervacijaDto;
+import rs.edu.raf.hotelreservation.dto.NotificationParameterDto;
 import rs.edu.raf.hotelreservation.dto.NotificationSendDto;
 import rs.edu.raf.hotelreservation.dto.RezervacijaDto;
 import rs.edu.raf.hotelreservation.exception.NotFoundException;
@@ -19,6 +20,7 @@ import rs.edu.raf.hotelreservation.repository.TerminRepository;
 import rs.edu.raf.hotelreservation.service.RezervacijaService;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -79,10 +81,16 @@ public class RezervacijaServiceImpl implements RezervacijaService {
         return rezervacijaMapper.rezervacijaToRezervacijaDto(rezervacija);
     }
 
-    private void sendRezervacijaNotification(Rezervacija rezervacija) {
+    private void sendRezervacijaReminder(Rezervacija rezervacija) {
         NotificationSendDto notificationSendDto = new NotificationSendDto();
         notificationSendDto.setNotificationType("reservationReminder");
-        // TODO dohvati email, ime i prezime sa user servisa i dodaj kao parametre
+        notificationSendDto.setEmail("email"); // TODO dohvati email iz user servisa
+        List<NotificationParameterDto> parameterDtos = new ArrayList<>();
+        parameterDtos.add(new NotificationParameterDto("hotel", rezervacija.getTipSobe().getHotel().getIme()));
+        parameterDtos.add(new NotificationParameterDto("firstName", "ime")); // TODO dohvati ime iz user servisa
+        parameterDtos.add(new NotificationParameterDto("lastName", "prezime")); // TODO dohvati prezime iz user servisa
+        parameterDtos.add(new NotificationParameterDto("roomType", rezervacija.getTipSobe().getIme()));
+        notificationSendDto.setParameters(parameterDtos);
 
         String message;
         try {
@@ -100,7 +108,7 @@ public class RezervacijaServiceImpl implements RezervacijaService {
         List<Rezervacija> unnotifiedRezervacijaList = rezervacijaRepository.getRezervacijaByReminded(false);
         for (Rezervacija rezervacija: unnotifiedRezervacijaList) {
             if (rezervacija.getTermini().get(0).getDatum().equals(LocalDate.now().plusDays(2)))
-                sendRezervacijaNotification(rezervacija);
+                sendRezervacijaReminder(rezervacija);
         }
     }
 }

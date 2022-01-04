@@ -8,6 +8,13 @@ public class NotificationParameterDto {
     @NotEmpty(message = "Parameter value can't be empty")
     private String value;
 
+    public NotificationParameterDto() { }
+
+    public NotificationParameterDto(String name, String value) {
+        this.name = name;
+        this.value = value;
+    }
+
     public String getName() {
         return name;
     }
