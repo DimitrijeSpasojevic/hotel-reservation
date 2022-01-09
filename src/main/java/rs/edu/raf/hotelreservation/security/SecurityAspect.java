@@ -1,5 +1,6 @@
 package rs.edu.raf.hotelreservation.security;
 
+
 import io.jsonwebtoken.Claims;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -56,7 +57,7 @@ public class SecurityAspect {
         //Check user role and proceed if user has appropriate role for specified route
         CheckSecurity checkSecurity = method.getAnnotation(CheckSecurity.class);
         String role = claims.get("role", String.class);
-        if (Arrays.asList(checkSecurity.roles()).contains(role)) {
+        if (Arrays.asList(checkSecurity.roles()).contains(role) || role.equalsIgnoreCase("ROLE_ADMIN")) {
             return joinPoint.proceed();
         }
         //Return FORBIDDEN if user has't appropriate role for specified route

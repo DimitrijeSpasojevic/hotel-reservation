@@ -42,6 +42,7 @@ public class RezervacijaServiceImpl implements RezervacijaService {
         this.jmsTemplate = jmsTemplate;
         this.objectMapper = objectMapper;
         this.notificationQueue = notificationQueue;
+        this.userServiceTemplate = userServiceTemplate;
     }
 
     @Override

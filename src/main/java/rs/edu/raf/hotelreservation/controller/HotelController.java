@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rs.edu.raf.hotelreservation.dto.*;
+import rs.edu.raf.hotelreservation.security.CheckSecurity;
 import rs.edu.raf.hotelreservation.service.HotelService;
 import rs.edu.raf.hotelreservation.service.TerminService;
 import springfox.documentation.annotations.ApiIgnore;
@@ -27,52 +28,44 @@ public class HotelController {
         this.terminService = terminService;
     }
 
-    @ApiOperation(value = "Get all hotels")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "page", value = "What page number you want", dataType = "string", paramType = "query"),
-            @ApiImplicitParam(name = "size", value = "Number of items to return", dataType = "string", paramType = "query"),
-            @ApiImplicitParam(name = "sort", allowMultiple = true, dataType = "string", paramType = "query",
-                    value = "Sorting criteria in the format: property(,asc|desc). " +
-                            "Default sort order is ascending. " +
-                            "Multiple sort criteria are supported.")})
-
-    @GetMapping
-    public ResponseEntity<Page<HotelDto>> getAllHotels(Pageable pageable){
-        return new ResponseEntity<>(hotelService.getAll(pageable), HttpStatus.OK);
-    }
-
     @ApiOperation(value = "Add hotel")
     @PostMapping
+    @CheckSecurity(roles = {"ROLE_ADMIN"})
     public ResponseEntity<HotelDto> addHotel(@RequestBody @Valid CreateHotelDto createHotelDto) {
         return new ResponseEntity<>(hotelService.addHotel(createHotelDto), HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "Get hotel by ID")
     @GetMapping("/{id}")
+    @CheckSecurity(roles = {"ROLE_CLIENT", "ROLE_MANAGER"})
     public ResponseEntity<HotelDto> getHotelById(@PathVariable("id") Long id){
         return new ResponseEntity<>(hotelService.getHotelById(id), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Get all room types for hotel")
     @GetMapping("/{id}/types")
+    @CheckSecurity(roles = {"ROLE_CLIENT", "ROLE_MANAGER"})
     public ResponseEntity<Page<TipSobeDto>> getAllRoomTypes(@PathVariable("id") Long id, @ApiIgnore Pageable pageable){
         return new ResponseEntity<>(hotelService.getAllRoomTypes(id, pageable), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Create room type")
     @PostMapping("/types")
+    @CheckSecurity(roles = {"ROLE_MANAGER"})
     public ResponseEntity<TipSobeDto> createRoomType(@RequestBody @Valid CreateTipSobeDto createTipSobeDto) {
         return new ResponseEntity<>(hotelService.createRoomType(createTipSobeDto), HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "Change hotel")
     @PutMapping
+    @CheckSecurity(roles = {"ROLE_MANAGER"})
     public ResponseEntity<HotelDto> changeHotel(@RequestBody @Valid HotelDto hotelDto) {
         return new ResponseEntity<>(hotelService.changeHotel(hotelDto), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Get all termini for hotel")
     @GetMapping("/{id}/termini")
+    @CheckSecurity(roles = {"ROLE_CLIENT", "ROLE_MANAGER"})
     public ResponseEntity<Page<TerminDto>> getAllTermini(@PathVariable("id") Long id, @ApiIgnore Pageable pageable) {
         return new ResponseEntity<>(terminService.getAllByHotel(id, pageable), HttpStatus.OK);
     }
