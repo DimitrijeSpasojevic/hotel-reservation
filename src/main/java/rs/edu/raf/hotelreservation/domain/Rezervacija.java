@@ -1,6 +1,7 @@
 package rs.edu.raf.hotelreservation.domain;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,8 +15,8 @@ public class Rezervacija {
     @ManyToMany
     private List<Termin> termini = new ArrayList<>();
     private boolean reminded;
-
     private Long userId;
+    private BigDecimal cena;
 
     public Long getUserId() {
         return userId;
@@ -55,5 +56,13 @@ public class Rezervacija {
 
     public void setReminded(boolean notified) {
         this.reminded = notified;
+    }
+
+    public BigDecimal getCena() {
+        return cena;
+    }
+
+    public void setCena(BigDecimal cena) {
+        this.cena = cena;
     }
 }

@@ -10,6 +10,7 @@ public class CreateRezervacijaDto {
     private Long pocetniTerminId;
     @NotEmpty(message = "kraj termina ne moze biti prazno")
     private Long krajnjiTerminId;
+    private Long userId;
 
     public Long getTipSobeId() {
         return tipSobeId;
@@ -33,5 +34,13 @@ public class CreateRezervacijaDto {
 
     public void setKrajnjiTerminId(Long krajnjiTerminId) {
         this.krajnjiTerminId = krajnjiTerminId;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }

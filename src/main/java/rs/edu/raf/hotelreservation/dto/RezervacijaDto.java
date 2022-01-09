@@ -1,6 +1,7 @@
 package rs.edu.raf.hotelreservation.dto;
 
 import javax.validation.constraints.NotEmpty;
+import java.math.BigDecimal;
 
 public class RezervacijaDto {
 
@@ -11,6 +12,8 @@ public class RezervacijaDto {
     private Long pocetniTerminId;
     @NotEmpty(message = "kraj termina ne moze biti prazno")
     private Long krajnjiTerminId;
+    private Long userId;
+    private BigDecimal cena;
 
     public Long getId() {
         return id;
@@ -42,5 +45,21 @@ public class RezervacijaDto {
 
     public void setKrajnjiTerminId(Long krajnjiTerminId) {
         this.krajnjiTerminId = krajnjiTerminId;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public BigDecimal getCena() {
+        return cena;
+    }
+
+    public void setCena(BigDecimal cena) {
+        this.cena = cena;
     }
 }

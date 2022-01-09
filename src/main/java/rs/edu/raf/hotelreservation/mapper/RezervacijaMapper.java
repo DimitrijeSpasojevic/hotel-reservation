@@ -10,6 +10,7 @@ import rs.edu.raf.hotelreservation.exception.NotFoundException;
 import rs.edu.raf.hotelreservation.repository.TerminRepository;
 import rs.edu.raf.hotelreservation.repository.TipSobeRepository;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Component
@@ -28,6 +29,8 @@ public class RezervacijaMapper {
         rezervacijaDto.setTipSobeId(rezervacija.getTipSobe().getId());
         rezervacijaDto.setPocetniTerminId(rezervacija.getTermini().get(0).getId());
         rezervacijaDto.setKrajnjiTerminId(rezervacija.getTermini().get(rezervacija.getTermini().size() - 1).getId());
+        rezervacijaDto.setUserId(rezervacija.getUserId());
+        rezervacijaDto.setCena(rezervacija.getCena());
         return rezervacijaDto;
     }
 
@@ -42,6 +45,11 @@ public class RezervacijaMapper {
         List<Termin> termini = terminRepository.findAllByTipSobe_IdAndDatumBetween(tipSobe.getId(), pocetak.getDatum(), kraj.getDatum());
         rezervacija.setTermini(termini);
         rezervacija.setReminded(false);
+        rezervacija.setUserId(createRezervacijaDto.getUserId());
+        BigDecimal cena = new BigDecimal("0.0");
+        for (Termin termin: termini)
+            cena = cena.add(termin.getTipSobe().getCena());
+        rezervacija.setCena(cena);
         return rezervacija;
     }
 

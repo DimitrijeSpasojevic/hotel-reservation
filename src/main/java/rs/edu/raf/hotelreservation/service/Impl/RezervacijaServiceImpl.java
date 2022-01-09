@@ -2,23 +2,23 @@ package rs.edu.raf.hotelreservation.service.Impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import rs.edu.raf.hotelreservation.domain.Rezervacija;
 import rs.edu.raf.hotelreservation.domain.Termin;
-import rs.edu.raf.hotelreservation.dto.CreateRezervacijaDto;
-import rs.edu.raf.hotelreservation.dto.NotificationParameterDto;
-import rs.edu.raf.hotelreservation.dto.NotificationSendDto;
-import rs.edu.raf.hotelreservation.dto.RezervacijaDto;
+import rs.edu.raf.hotelreservation.dto.*;
 import rs.edu.raf.hotelreservation.exception.NotFoundException;
 import rs.edu.raf.hotelreservation.mapper.RezervacijaMapper;
 import rs.edu.raf.hotelreservation.repository.RezervacijaRepository;
 import rs.edu.raf.hotelreservation.repository.TerminRepository;
 import rs.edu.raf.hotelreservation.service.RezervacijaService;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,10 +31,11 @@ public class RezervacijaServiceImpl implements RezervacijaService {
     private JmsTemplate jmsTemplate;
     private ObjectMapper objectMapper;
     private String notificationQueue;
+    private RestTemplate userServiceTemplate;
 
     public RezervacijaServiceImpl(RezervacijaRepository rezervacijaRepository, RezervacijaMapper rezervacijaMapper,
                                   TerminRepository terminRepository, JmsTemplate jmsTemplate, ObjectMapper objectMapper,
-                                  @Value("${destination.sendNotification}") String notificationQueue) {
+                                  @Value("${destination.sendNotification}") String notificationQueue, RestTemplate userServiceTemplate) {
         this.rezervacijaRepository = rezervacijaRepository;
         this.rezervacijaMapper = rezervacijaMapper;
         this.terminRepository = terminRepository;
@@ -58,19 +59,21 @@ public class RezervacijaServiceImpl implements RezervacijaService {
 
     @Override
     public RezervacijaDto createRezervacija(CreateRezervacijaDto createRezervacijaDto) {
-        // TODO dohvati rank i popust korisnika iz korisničkog servisa sinhrono sa ponavljanje
-        // TODO obavesti korisnički servis o rezervaciji
-        Rezervacija rezervacija = rezervacijaRepository.save(rezervacijaMapper.createRezervacijaDtoToRezervacija(createRezervacijaDto));
+        Rezervacija rezervacija = rezervacijaMapper.createRezervacijaDtoToRezervacija(createRezervacijaDto);
+        RankDto rankDto = userServiceTemplate.getForObject("/api/user/"+ rezervacija.getUserId() + "/rank", RankDto.class);
+        BigDecimal discount = new BigDecimal(rankDto.getDiscount() / 100);
+        rezervacija.setCena(rezervacija.getCena().multiply(discount));
+        rezervacija = rezervacijaRepository.save(rezervacija);
         for (Termin termin : rezervacija.getTermini()) {
             termin.setBrojSlobodnihSoba(termin.getBrojSlobodnihSoba() - 1);
             terminRepository.save(termin);
         }
+        userServiceTemplate.put("/api/user/" + rezervacija.getUserId() + "/reservation", null);
         return rezervacijaMapper.rezervacijaToRezervacijaDto(rezervacija);
     }
 
     @Override
     public RezervacijaDto deleteRezervacijaById(Long rezervacijaId) {
-        // TODO obavesti korisnički servis o rezervaciji
         Rezervacija rezervacija = rezervacijaRepository.findById(rezervacijaId)
                 .orElseThrow(() -> new NotFoundException(String.format("Rezervacija with id: %d not found.", rezervacijaId)));
         for (Termin termin : rezervacija.getTermini()) {
@@ -78,17 +81,19 @@ public class RezervacijaServiceImpl implements RezervacijaService {
             terminRepository.save(termin);
         }
         rezervacijaRepository.delete(rezervacija);
+        userServiceTemplate.delete("/api/user/" + rezervacija.getUserId() + "/reservation");
         return rezervacijaMapper.rezervacijaToRezervacijaDto(rezervacija);
     }
 
     private void sendRezervacijaReminder(Rezervacija rezervacija) {
         NotificationSendDto notificationSendDto = new NotificationSendDto();
         notificationSendDto.setNotificationType("reservationReminder");
-        notificationSendDto.setEmail("email"); // TODO dohvati email iz user servisa
+        ClientDto clientDto = userServiceTemplate.getForObject("/api/user/" + rezervacija.getUserId(), ClientDto.class);
+        notificationSendDto.setEmail(clientDto.getEmail());
         List<NotificationParameterDto> parameterDtos = new ArrayList<>();
         parameterDtos.add(new NotificationParameterDto("hotel", rezervacija.getTipSobe().getHotel().getIme()));
-        parameterDtos.add(new NotificationParameterDto("firstName", "ime")); // TODO dohvati ime iz user servisa
-        parameterDtos.add(new NotificationParameterDto("lastName", "prezime")); // TODO dohvati prezime iz user servisa
+        parameterDtos.add(new NotificationParameterDto("firstName", clientDto.getFirstName()));
+        parameterDtos.add(new NotificationParameterDto("lastName", clientDto.getLastName()));
         parameterDtos.add(new NotificationParameterDto("roomType", rezervacija.getTipSobe().getIme()));
         notificationSendDto.setParameters(parameterDtos);
 
