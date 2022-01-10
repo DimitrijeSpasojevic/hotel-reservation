@@ -1,14 +1,15 @@
 package rs.edu.raf.hotelreservation.dto;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 public class CreateRezervacijaDto {
 
-    @NotEmpty(message = "tip sobe ne moze da bude prazno")
+    @NotNull(message = "tip sobe ne moze da bude prazno")
     private Long tipSobeId;
-    @NotEmpty(message = "pocetak termina ne moze biti prazno")
+    @NotNull(message = "pocetak termina ne moze biti prazno")
     private Long pocetniTerminId;
-    @NotEmpty(message = "kraj termina ne moze biti prazno")
+    @NotNull(message = "kraj termina ne moze biti prazno")
     private Long krajnjiTerminId;
     private Long userId;
 

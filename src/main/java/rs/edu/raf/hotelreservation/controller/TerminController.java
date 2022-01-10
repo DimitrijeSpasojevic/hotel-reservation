@@ -28,14 +28,14 @@ public class TerminController {
     @ApiOperation(value = "Get all available termini by city")
     @GetMapping("/city/{city}")
     @CheckSecurity(roles = {"ROLE_CLIENT", "ROLE_MANAGER"})
-    public ResponseEntity<Page<TerminDto>> getAllTerminiByCity(@PathVariable("city") String city, @ApiIgnore Pageable pageable) {
+    public ResponseEntity<Page<TerminDto>> getAllTerminiByCity(@PathVariable("city") String city, @ApiIgnore Pageable pageable, @RequestHeader("authorization") String authorization) {
         return new ResponseEntity<>(terminService.getAllAvailableByCity(city, pageable), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Get all available termini by hotel")
     @GetMapping("/hotel/{hotelId}")
     @CheckSecurity(roles = {"ROLE_CLIENT", "ROLE_MANAGER"})
-    public ResponseEntity<Page<TerminDto>> getAllTerminiByHotel(@PathVariable("hotelId") Long hotelId, @ApiIgnore Pageable pageable) {
+    public ResponseEntity<Page<TerminDto>> getAllTerminiByHotel(@PathVariable("hotelId") Long hotelId, @ApiIgnore Pageable pageable, @RequestHeader("authorization") String authorization) {
         return new ResponseEntity<>(terminService.getAllAvailableByHotel(hotelId, pageable), HttpStatus.OK);
     }
 
@@ -43,7 +43,7 @@ public class TerminController {
     @PostMapping("/period")
     @CheckSecurity(roles = {"ROLE_CLIENT", "ROLE_MANAGER"})
     public ResponseEntity<Page<TerminDto>> getAllTerminiByPeriod(@RequestBody @Valid SearchTerminiByDateDto searchTerminiByDateDto,
-                                                                 @ApiIgnore Pageable pageable) {
+                                                                 @ApiIgnore Pageable pageable, @RequestHeader("authorization") String authorization) {
         return new ResponseEntity<>(terminService.
                 getAllAvailableByPeriod(searchTerminiByDateDto.getStartDate(), searchTerminiByDateDto.getEndDate(), pageable), HttpStatus.OK);
     }
@@ -52,21 +52,21 @@ public class TerminController {
     @GetMapping("/price/{minPrice}/{maxPrice}")
     @CheckSecurity(roles = {"ROLE_CLIENT", "ROLE_MANAGER"})
     public ResponseEntity<Page<TerminDto>> getAllTerminiByPrice(@PathVariable("minPrice") BigDecimal minPrice,
-                                                                @PathVariable("maxPrice") BigDecimal maxPrice, @ApiIgnore Pageable pageable) {
+                                                                @PathVariable("maxPrice") BigDecimal maxPrice, @ApiIgnore Pageable pageable, @RequestHeader("authorization") String authorization) {
         return new ResponseEntity<>(terminService.getAllAvailableByPrice(minPrice, maxPrice, pageable), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Create termin")
     @PostMapping
     @CheckSecurity(roles = {"ROLE_MANAGER"})
-    public ResponseEntity<TerminDto> createTermin(@RequestBody @Valid CreateTerminDto createTerminDto) {
+    public ResponseEntity<TerminDto> createTermin(@RequestBody @Valid CreateTerminDto createTerminDto, @RequestHeader("authorization") String authorization) {
         return new ResponseEntity<>(terminService.createTermin(createTerminDto), HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "Delete termin")
     @DeleteMapping("/{id}")
     @CheckSecurity(roles = {"ROLE_MANAGER"})
-    public ResponseEntity<TerminDto> deleteTermin(@PathVariable("id") Long id) {
+    public ResponseEntity<TerminDto> deleteTermin(@PathVariable("id") Long id, @RequestHeader("authorization") String authorization) {
         return new ResponseEntity<>(terminService.deleteTerminById(id), HttpStatus.OK);
     }
 }

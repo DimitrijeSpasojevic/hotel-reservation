@@ -28,42 +28,42 @@ public class RecenzijaController {
     @ApiOperation(value = "Vrati sve recenzije za hotelId")
     @GetMapping("/hotel/{id}")
     @CheckSecurity(roles = {"ROLE_CLIENT", "ROLE_MANAGER"})
-    public ResponseEntity<Page<RecenzijaDto>> findByHotelId(@PathVariable("id") Long hotelId, @ApiIgnore  Pageable pageable){
+    public ResponseEntity<Page<RecenzijaDto>> findByHotelId(@PathVariable("id") Long hotelId, @ApiIgnore  Pageable pageable, @RequestHeader("authorization") String authorization){
         return new ResponseEntity<>(recenzijaService.findByHotelId(hotelId,pageable), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Vrati sve recenzije za grad")
     @GetMapping("/city/{city}")
     @CheckSecurity(roles = {"ROLE_CLIENT", "ROLE_MANAGER"})
-    public ResponseEntity<Page<RecenzijaDto>> findByCity(@PathVariable("city") String city, @ApiIgnore Pageable pageable){
+    public ResponseEntity<Page<RecenzijaDto>> findByCity(@PathVariable("city") String city, @ApiIgnore Pageable pageable, @RequestHeader("authorization") String authorization){
         return new ResponseEntity<>(recenzijaService.findByCity(city, pageable), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Vrati sve recenzije za korisnika")
     @GetMapping("/user/{userId}")
     @CheckSecurity(roles = {"ROLE_CLIENT", "ROLE_MANAGER"})
-    public ResponseEntity<Page<RecenzijaDto>> findByUserId(@PathVariable("userId") Long userId, @ApiIgnore Pageable pageable){
+    public ResponseEntity<Page<RecenzijaDto>> findByUserId(@PathVariable("userId") Long userId, @ApiIgnore Pageable pageable, @RequestHeader("authorization") String authorization){
         return new ResponseEntity<>(recenzijaService.findByUserId(userId,pageable), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Obrisi po id-u recenzije")
     @DeleteMapping("/{id}")
     @CheckSecurity(roles = {"ROLE_MANAGER"})
-    public ResponseEntity<RecenzijaDto> deleteById(@PathVariable("id") Long id){
+    public ResponseEntity<RecenzijaDto> deleteById(@PathVariable("id") Long id, @RequestHeader("authorization") String authorization){
         return new ResponseEntity<>(recenzijaService.deleteById(id), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Update po id-u recenziju")
     @PutMapping
     @CheckSecurity(roles = {"ROLE_CLIENT", "ROLE_MANAGER"})
-    public ResponseEntity<RecenzijaDto> updateById(@RequestBody @Valid UpdateRecenzijaDto updateRecenzijaDto){
+    public ResponseEntity<RecenzijaDto> updateById(@RequestBody @Valid UpdateRecenzijaDto updateRecenzijaDto, @RequestHeader("authorization") String authorization){
         return new ResponseEntity<>(recenzijaService.update(updateRecenzijaDto), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Kreiraj recenziju")
     @PostMapping
     @CheckSecurity(roles = {"ROLE_CLIENT", "ROLE_MANAGER"})
-    public ResponseEntity<RecenzijaDto> createRecenzija(@RequestBody @Valid CreateRecenzijaDto createRecenzijaDto){
+    public ResponseEntity<RecenzijaDto> createRecenzija(@RequestBody @Valid CreateRecenzijaDto createRecenzijaDto,@RequestHeader("authorization") String authorization){
         return new ResponseEntity<>(recenzijaService.createRecenzija(createRecenzijaDto), HttpStatus.OK);
     }
 }

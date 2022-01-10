@@ -9,7 +9,7 @@ public class CreateRecenzijaDto {
 
     @NotNull
     private Long hotelId;
-    @NotEmpty(message = "Ne moze da postoji recenzija bez koisnika")
+    @NotNull(message = "Ne moze da postoji recenzija bez koisnika")
     private Long userId;
     @NotNull
     @Min(value = 1)

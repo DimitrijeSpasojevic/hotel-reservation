@@ -26,28 +26,28 @@ public class RezervacijaController {
     @ApiOperation("Get a reservation")
     @GetMapping("/{id}")
     @CheckSecurity(roles = {"ROLE_CLIENT", "ROLE_MANAGER"})
-    public ResponseEntity<RezervacijaDto> getReservationById(@PathVariable("id") Long id) {
+    public ResponseEntity<RezervacijaDto> getReservationById(@PathVariable("id") Long id, @RequestHeader("authorization") String authorization) {
         return new ResponseEntity<>(rezervacijaService.getRezervacijaById(id), HttpStatus.OK);
     }
 
     @ApiOperation("Get all reservations")
     @GetMapping("/hotel/{hotelId}")
     @CheckSecurity(roles = {"ROLE_MANAGER"})
-    public ResponseEntity<Page<RezervacijaDto>> getReservationsByHotel(@PathVariable("hotelId") Long hotelId, @ApiIgnore Pageable pageable) {
+    public ResponseEntity<Page<RezervacijaDto>> getReservationsByHotel(@PathVariable("hotelId") Long hotelId, @ApiIgnore Pageable pageable, @RequestHeader("authorization") String authorization) {
         return new ResponseEntity<>(rezervacijaService.getRezervacijaByHotelId(hotelId, pageable), HttpStatus.OK);
     }
 
     @ApiOperation("Create reservation")
     @PostMapping
     @CheckSecurity(roles = {"ROLE_CLIENT", "ROLE_MANAGER"})
-    public ResponseEntity<RezervacijaDto> createReservation(@RequestBody @Valid CreateRezervacijaDto createRezervacijaDto) {
+    public ResponseEntity<RezervacijaDto> createReservation(@RequestBody @Valid CreateRezervacijaDto createRezervacijaDto, @RequestHeader("authorization") String authorization) {
         return new ResponseEntity<>(rezervacijaService.createRezervacija(createRezervacijaDto), HttpStatus.CREATED);
     }
 
     @ApiOperation("Delete reservation")
     @DeleteMapping("/{id}")
     @CheckSecurity(roles = {"ROLE_CLIENT", "ROLE_MANAGER"})
-    public ResponseEntity<RezervacijaDto> deleteReservation(@PathVariable("id") Long id) {
+    public ResponseEntity<RezervacijaDto> deleteReservation(@PathVariable("id") Long id, @RequestHeader("authorization") String authorization) {
         return new ResponseEntity<>(rezervacijaService.deleteRezervacijaById(id), HttpStatus.OK);
     }
 }
