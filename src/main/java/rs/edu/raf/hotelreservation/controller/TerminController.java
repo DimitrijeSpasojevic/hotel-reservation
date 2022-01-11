@@ -25,6 +25,13 @@ public class TerminController {
         this.terminService = terminService;
     }
 
+    @ApiOperation(value = "Get termin by id")
+    @GetMapping("/{terminId}")
+    @CheckSecurity(roles = {"ROLE_CLIENT", "ROLE_MANAGER"})
+    public ResponseEntity<TerminDto> getTerminById(@PathVariable("terminId") Long terminId) {
+        return new ResponseEntity<>(terminService.getTerminById(terminId), HttpStatus.OK);
+    }
+
     @ApiOperation(value = "Get all available termini by city")
     @GetMapping("/city/{city}")
     @CheckSecurity(roles = {"ROLE_CLIENT", "ROLE_MANAGER"})

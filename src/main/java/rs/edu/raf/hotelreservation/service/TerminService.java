@@ -19,4 +19,5 @@ public interface TerminService {
     TerminDto createTermin(CreateTerminDto createTerminDto);
     TerminDto deleteTerminById(Long id);
     TipSobeDto getTipSobeByTerminId(Long terminId);
+    TerminDto getTerminById(Long terminId);
 }

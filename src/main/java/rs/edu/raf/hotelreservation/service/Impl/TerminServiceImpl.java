@@ -79,4 +79,11 @@ public class TerminServiceImpl implements TerminService {
     public TipSobeDto getTipSobeByTerminId(Long terminId) {
         return tipSobeMapper.tipSobeToTipSobeDto(terminRepository.getById(terminId).getTipSobe());
     }
+
+    @Override
+    public TerminDto getTerminById(Long terminId) {
+        Termin termin = terminRepository.findById(terminId)
+                .orElseThrow(() -> new NotFoundException(String.format("Termin with id: %d not found.", terminId)));
+        return terminMapper.terminToTerminDto(termin);
+    }
 }
