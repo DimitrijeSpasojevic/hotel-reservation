@@ -37,6 +37,13 @@ public class RezervacijaController {
         return new ResponseEntity<>(rezervacijaService.getRezervacijaByHotelId(hotelId, pageable), HttpStatus.OK);
     }
 
+    @ApiOperation("Get all reservations by user")
+    @GetMapping("/user/{userId}")
+    @CheckSecurity(roles = {"ROLE_CLIENT", "ROLE_MANAGER"})
+    public ResponseEntity<Page<RezervacijaDto>> getReservationsByUser(@PathVariable("userId") Long userId, @ApiIgnore Pageable pageable, @RequestHeader("authorization") String authorization) {
+        return new ResponseEntity<>(rezervacijaService.getRezervacijaByUser(userId, pageable), HttpStatus.OK);
+    }
+
     @ApiOperation("Create reservation")
     @PostMapping
     @CheckSecurity(roles = {"ROLE_CLIENT", "ROLE_MANAGER"})

@@ -12,4 +12,5 @@ import java.util.List;
 public interface RezervacijaRepository extends JpaRepository<Rezervacija, Long> {
     Page<Rezervacija> getRezervacijaByTipSobe_Hotel_Id(Long hotelId, Pageable pageable);
     List<Rezervacija> getRezervacijaByReminded(boolean reminded);
+    Page<Rezervacija> getRezervacijaByUserId(Long userId, Pageable pageable);
 }

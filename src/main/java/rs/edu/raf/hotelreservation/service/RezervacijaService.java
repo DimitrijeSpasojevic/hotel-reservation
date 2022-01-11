@@ -11,4 +11,5 @@ public interface RezervacijaService {
     RezervacijaDto createRezervacija(CreateRezervacijaDto createRezervacijaDto);
     RezervacijaDto deleteRezervacijaById(Long rezervacijaId);
     void remindOfRezervacija();
+    Page<RezervacijaDto> getRezervacijaByUser(Long userId, Pageable pageable);
 }

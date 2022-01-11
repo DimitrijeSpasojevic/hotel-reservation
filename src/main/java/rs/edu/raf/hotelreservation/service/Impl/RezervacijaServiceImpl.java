@@ -117,4 +117,10 @@ public class RezervacijaServiceImpl implements RezervacijaService {
                 sendRezervacijaReminder(rezervacija);
         }
     }
+
+    @Override
+    public Page<RezervacijaDto> getRezervacijaByUser(Long userId, Pageable pageable) {
+        return rezervacijaRepository.getRezervacijaByUserId(userId, pageable)
+                .map(rezervacijaMapper::rezervacijaToRezervacijaDto);
+    }
 }
