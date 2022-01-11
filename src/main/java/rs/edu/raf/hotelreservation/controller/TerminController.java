@@ -28,7 +28,7 @@ public class TerminController {
     @ApiOperation(value = "Get termin by id")
     @GetMapping("/{terminId}")
     @CheckSecurity(roles = {"ROLE_CLIENT", "ROLE_MANAGER"})
-    public ResponseEntity<TerminDto> getTerminById(@PathVariable("terminId") Long terminId) {
+    public ResponseEntity<TerminDto> getTerminById(@PathVariable("terminId") Long terminId, @RequestHeader("authorization") String authorization) {
         return new ResponseEntity<>(terminService.getTerminById(terminId), HttpStatus.OK);
     }
 

@@ -12,7 +12,7 @@ public class Rezervacija {
     private Long id;
     @ManyToOne
     private TipSobe tipSobe;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Termin> termini = new ArrayList<>();
     private boolean reminded;
     private Long userId;

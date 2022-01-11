@@ -62,7 +62,7 @@ public class RezervacijaServiceImpl implements RezervacijaService {
     public RezervacijaDto createRezervacija(CreateRezervacijaDto createRezervacijaDto) {
         Rezervacija rezervacija = rezervacijaMapper.createRezervacijaDtoToRezervacija(createRezervacijaDto);
         RankDto rankDto = userServiceTemplate.getForObject("/api/user/"+ rezervacija.getUserId() + "/rank", RankDto.class);
-        BigDecimal discount = new BigDecimal(rankDto.getDiscount() * 0.01);
+        BigDecimal discount = new BigDecimal(1 - (rankDto.getDiscount() * 0.01));
         rezervacija.setCena(rezervacija.getCena().multiply(discount));
         rezervacija = rezervacijaRepository.save(rezervacija);
         for (Termin termin : rezervacija.getTermini()) {
