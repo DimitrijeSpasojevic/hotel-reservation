@@ -33,10 +33,17 @@ public class HotelController {
         return new ResponseEntity<>(hotelService.addHotel(createHotelDto), HttpStatus.CREATED);
     }
 
+    @ApiOperation(value = "Get all hotels")
+    @GetMapping
+    @CheckSecurity(roles = {"ROLE_CLIENT", "ROLE_MANAGER"})
+    public ResponseEntity<Page<HotelDto>> getAllHotels(@ApiIgnore Pageable pageable, @RequestHeader("authorization") String authorization) {
+        return new ResponseEntity<>(hotelService.getAll(pageable), HttpStatus.OK);
+    }
+
     @ApiOperation(value = "Get hotel by ID")
     @GetMapping("/{id}")
     @CheckSecurity(roles = {"ROLE_CLIENT", "ROLE_MANAGER"})
-    public ResponseEntity<HotelDto> getHotelById(@PathVariable("id") Long id,@RequestHeader("authorization") String authorization){
+    public ResponseEntity<HotelDto> getHotelById(@PathVariable("id") Long id, @RequestHeader("authorization") String authorization){
         return new ResponseEntity<>(hotelService.getHotelById(id), HttpStatus.OK);
     }
 
