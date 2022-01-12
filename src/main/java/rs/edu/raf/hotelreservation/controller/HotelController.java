@@ -35,8 +35,7 @@ public class HotelController {
 
     @ApiOperation(value = "Get all hotels")
     @GetMapping
-    @CheckSecurity(roles = {"ROLE_CLIENT", "ROLE_MANAGER"})
-    public ResponseEntity<Page<HotelDto>> getAllHotels(@ApiIgnore Pageable pageable, @RequestHeader("authorization") String authorization) {
+    public ResponseEntity<Page<HotelDto>> getAllHotels(@ApiIgnore Pageable pageable) {
         return new ResponseEntity<>(hotelService.getAll(pageable), HttpStatus.OK);
     }
 

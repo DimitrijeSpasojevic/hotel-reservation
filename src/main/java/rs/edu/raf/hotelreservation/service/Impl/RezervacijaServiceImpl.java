@@ -2,7 +2,7 @@ package rs.edu.raf.hotelreservation.service.Impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Qualifier;
+import io.github.resilience4j.retry.Retry;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,10 +32,12 @@ public class RezervacijaServiceImpl implements RezervacijaService {
     private ObjectMapper objectMapper;
     private String notificationQueue;
     private RestTemplate userServiceTemplate;
+    private Retry userServiceRetry;
 
     public RezervacijaServiceImpl(RezervacijaRepository rezervacijaRepository, RezervacijaMapper rezervacijaMapper,
                                   TerminRepository terminRepository, JmsTemplate jmsTemplate, ObjectMapper objectMapper,
-                                  @Value("${destination.sendNotification}") String notificationQueue, RestTemplate userServiceTemplate) {
+                                  @Value("${destination.sendNotification}") String notificationQueue, RestTemplate userServiceTemplate,
+                                  Retry userServiceRetry) {
         this.rezervacijaRepository = rezervacijaRepository;
         this.rezervacijaMapper = rezervacijaMapper;
         this.terminRepository = terminRepository;
@@ -43,6 +45,7 @@ public class RezervacijaServiceImpl implements RezervacijaService {
         this.objectMapper = objectMapper;
         this.notificationQueue = notificationQueue;
         this.userServiceTemplate = userServiceTemplate;
+        this.userServiceRetry = userServiceRetry;
     }
 
     @Override
@@ -61,7 +64,8 @@ public class RezervacijaServiceImpl implements RezervacijaService {
     @Override
     public RezervacijaDto createRezervacija(CreateRezervacijaDto createRezervacijaDto) {
         Rezervacija rezervacija = rezervacijaMapper.createRezervacijaDtoToRezervacija(createRezervacijaDto);
-        RankDto rankDto = userServiceTemplate.getForObject("/api/user/"+ rezervacija.getUserId() + "/rank", RankDto.class);
+        Long usrId = rezervacija.getUserId();
+        RankDto rankDto = Retry.decorateSupplier(userServiceRetry,()->getRankDto(usrId)).get();
         BigDecimal discount = new BigDecimal(1 - (rankDto.getDiscount() * 0.01));
         rezervacija.setCena(rezervacija.getCena().multiply(discount));
         rezervacija = rezervacijaRepository.save(rezervacija);
@@ -122,5 +126,14 @@ public class RezervacijaServiceImpl implements RezervacijaService {
     public Page<RezervacijaDto> getRezervacijaByUser(Long userId, Pageable pageable) {
         return rezervacijaRepository.getRezervacijaByUserId(userId, pageable)
                 .map(rezervacijaMapper::rezervacijaToRezervacijaDto);
+    }
+
+    private RankDto getRankDto(Long userId){
+        System.out.println("Pokusaj dohvatanja rankDto");
+        try {
+            return userServiceTemplate.getForObject("/api/user/"+ userId + "/rank", RankDto.class);
+        }catch (Exception e){
+            throw new RuntimeException("Internal server error dohvatanje ranka preko retry-a");
+        }
     }
 }
